@@ -20,9 +20,19 @@ public class Food implements Serializable{
     private String name;
 
     @ManyToMany
+    @JoinTable(
+            name = "ordered",
+            joinColumns = @JoinColumn(name = "orderedFood"),
+            inverseJoinColumns = @JoinColumn(name = "id")
+    )
     Set<Order> ordered;
 
     @ManyToMany
+    @JoinTable(
+            name = "havind",
+            joinColumns = @JoinColumn(name = "havingFood"),
+            inverseJoinColumns = @JoinColumn(name = "id")
+    )
     Set<Restaurant> having;
 
     public Food setName(String name) {

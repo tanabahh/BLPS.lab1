@@ -19,7 +19,7 @@ public class Restaurant implements Serializable{
     @Column(name = "name")
     private String name;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "having")
     Set<Food> havingFood;
 
     public Restaurant setName(String name) {

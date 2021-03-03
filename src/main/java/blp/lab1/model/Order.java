@@ -27,7 +27,7 @@ public class Order implements Serializable{
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "ordered")
     Set<Food> orderedFood;
 
     public Order setPaid (Boolean paid) {
