@@ -7,23 +7,22 @@ import java.io.Serializable;
 import java.util.Set;
 
 
-@Data //посмотреть что с сеттарами
-@Table(name = "ORDER")
+@Data
+@Table(name = "orders")
 @Entity
 public class Order implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "paid")
     private Boolean paid;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 

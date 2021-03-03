@@ -8,12 +8,11 @@ import java.util.Set;
 
 
 @Data
-@Table(name = "RESTAURANT")
+@Table(name = "restaurant")
 @Entity
 public class Restaurant implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "name")

@@ -9,11 +9,10 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "FOOD")
+@Table(name = "food")
 public class Food implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "name")
@@ -21,17 +20,17 @@ public class Food implements Serializable{
 
     @ManyToMany
     @JoinTable(
-            name = "ordered",
-            joinColumns = @JoinColumn(name = "orderedFood"),
-            inverseJoinColumns = @JoinColumn(name = "id")
+            name = "ordered_food",
+            joinColumns = @JoinColumn(name = "food_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id")
     )
     Set<Order> ordered;
 
     @ManyToMany
     @JoinTable(
-            name = "havind",
-            joinColumns = @JoinColumn(name = "havingFood"),
-            inverseJoinColumns = @JoinColumn(name = "id")
+            name = "restaurant_food",
+            joinColumns = @JoinColumn(name = "food_id"),
+            inverseJoinColumns = @JoinColumn(name = "restaurant_id")
     )
     Set<Restaurant> having;
 
