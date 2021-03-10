@@ -39,14 +39,14 @@ public class OrderController {
 
      @ApiOperation(value = "${OrderController.addOrder}")
      @PostMapping("/add")
-     public Order addOrder(@ApiParam("user_id") @RequestParam(name = "user_id") Long userId,
+     public HttpStatus addOrder(@ApiParam("user_id") @RequestParam(name = "user_id") Long userId,
                            @ApiParam("restaurant_id") @RequestParam(name = "restaurant_id") Long restaurantId,
                            @ApiParam("ordered_food") @RequestParam(name = "ordered_food") Set<Long> orderedFood) {
-        return orderService.saveOrder(new Order()
-                .setPaid(false)
-                .setRestaurant(restaurantService.fetchRestaurantById(restaurantId))
-                .setUser(userService.fetchUserById(userId))
-                .setOrderedFood(foodService.fetchOrderedFoodBySetOfId(orderedFood)));
+        orderService.saveOrder(new Order(false,
+                userService.fetchUserById(userId),
+                restaurantService.fetchRestaurantById(restaurantId),
+                foodService.fetchOrderedFoodBySetOfId(orderedFood)));
+        return HttpStatus.OK;
      }
 
      @ApiOperation(value = "${OrderController.pay}")

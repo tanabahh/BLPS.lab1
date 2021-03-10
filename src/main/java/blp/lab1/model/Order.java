@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Set;
 
 
-@Data
 @Table(name = "orders")
 @Entity
 public class Order implements Serializable{
@@ -26,8 +25,28 @@ public class Order implements Serializable{
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-    @ManyToMany(mappedBy = "ordered")
+    @ManyToMany
+    @JoinTable(
+            name = "ordered_food",
+            joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "food_id", referencedColumnName = "id")
+    )
     Set<Food> orderedFood;
+
+    public Order(){};
+
+    public Order(Boolean paid, User user, Restaurant restaurant, Set<Food> foods) {
+        this.paid = paid;
+        this.user = user;
+        this.restaurant = restaurant;
+        this.orderedFood = foods;
+        this.orderedFood.forEach(x -> x.getOrdered().add(this));
+    }
+
+
+    public Set<Food> getOrderedFood() {
+        return orderedFood;
+    }
 
     public Order setPaid (Boolean paid) {
         this.paid = paid;

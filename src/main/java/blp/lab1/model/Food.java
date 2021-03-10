@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Set;
 
 
-@Data
 @Entity
 @Table(name = "food")
 public class Food implements Serializable{
@@ -18,12 +17,7 @@ public class Food implements Serializable{
     @Column(name = "name")
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "ordered_food",
-            joinColumns = @JoinColumn(name = "food_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
-    )
+    @ManyToMany(mappedBy = "orderedFood")
     Set<Order> ordered;
 
     @ManyToMany
@@ -33,6 +27,14 @@ public class Food implements Serializable{
             inverseJoinColumns = @JoinColumn(name = "restaurant_id")
     )
     Set<Restaurant> having;
+
+    public Food(){};
+
+    public Set<Restaurant> getHaving(){ return this.having; }
+
+    public Set<Order> getOrdered() {
+        return this.ordered;
+    }
 
     public Food setName(String name) {
         this.name = name;

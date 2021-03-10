@@ -6,6 +6,7 @@ import blp.lab1.service.RestaurantService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,10 +28,9 @@ public class RestaurantController {
 
     @ApiOperation(value = "${RestaurantControlle.addRestaurant}")
     @PostMapping("/add")
-    public Restaurant addRestaurant(@ApiParam("name") @RequestParam(name = "name") String name,
+    public HttpStatus addRestaurant(@ApiParam("name") @RequestParam(name = "name") String name,
                                     @ApiParam("restaurant_food") @RequestParam(name = "restaurant_food") Set<Long> restaurantFood) {
-        return restaurantService.saveRestaurant(new Restaurant()
-                .setName(name)
-                .setHavingFood(foodService.fetchOrderedFoodBySetOfId(restaurantFood)));
+        restaurantService.saveRestaurant(new Restaurant(name, foodService.fetchOrderedFoodBySetOfId(restaurantFood)));
+        return HttpStatus.OK;
     }
 }

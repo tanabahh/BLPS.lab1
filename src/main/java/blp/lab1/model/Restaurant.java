@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Set;
 
 
-@Data
 @Table(name = "restaurant")
 @Entity
 public class Restaurant implements Serializable{
@@ -20,6 +19,14 @@ public class Restaurant implements Serializable{
 
     @ManyToMany(mappedBy = "having")
     Set<Food> havingFood;
+
+    public Restaurant(){};
+
+    public Restaurant(String name, Set<Food> havingFood) {
+        this.name = name;
+        this.havingFood = havingFood;
+        this.havingFood.forEach(x -> x.getHaving().add(this));
+    }
 
     public Restaurant setName(String name) {
         this.name = name;

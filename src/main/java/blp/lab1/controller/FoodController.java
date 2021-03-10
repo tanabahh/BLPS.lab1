@@ -23,7 +23,6 @@ public class FoodController {
     @ApiOperation(value = "${FoodController.addFood}")
     @PostMapping("/add")
     public Food addFood (@ApiParam("name") @RequestParam(name = "name") String name) {
-        return foodService.saveFood(new Food()
-                .setName(name));
+        return foodService.saveFood(new Food().setName(name));
     }
 }
