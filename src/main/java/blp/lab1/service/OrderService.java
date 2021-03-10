@@ -16,6 +16,10 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
+    public void paidForOrder(Long order_id) {
+        orderRepository.paidForOrder(order_id);
+    }
+
     public Order fetchOrderById(Long id) {
         return orderRepository.findById(id).isPresent() ? orderRepository.findById(id).get() : null;
     }

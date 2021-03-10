@@ -31,10 +31,9 @@ public class OrderController {
 
      @ApiOperation(value = "${OrderController.getOrder}")
      @GetMapping("/{id}")
-     public Order getOrder(@ApiParam("id") @PathVariable(name = "id") Long orderId) {
+     public Boolean getOrder(@ApiParam("id") @PathVariable(name = "id") Long orderId) {
          System.out.println(orderId);
-         System.out.println("HELLLOO" + orderService.fetchOrderById(orderId));
-        return orderService.fetchOrderById(orderId);
+        return orderService.fetchOrderById(orderId).getPaid();
      }
 
      @ApiOperation(value = "${OrderController.addOrder}")
@@ -52,8 +51,11 @@ public class OrderController {
      @ApiOperation(value = "${OrderController.pay}")
      @PostMapping("/{id}/pay")
      public HttpStatus pay(@ApiParam("id") @PathVariable(name = "id") Long id) {
-        orderService.fetchOrderById(id).setPaid(true);
-        return HttpStatus.OK;
+         System.out.println("Paid" + id);
+        orderService.paidForOrder(id);
+        if (orderService.fetchOrderById(id).getPaid()) {
+            return HttpStatus.OK;
+        } else return HttpStatus.BAD_REQUEST;
      }
 
 }

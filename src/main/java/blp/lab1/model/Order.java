@@ -48,6 +48,10 @@ public class Order implements Serializable{
         return orderedFood;
     }
 
+    public Boolean getPaid () {
+        return this.paid;
+    }
+
     public Order setPaid (Boolean paid) {
         this.paid = paid;
         return this;
