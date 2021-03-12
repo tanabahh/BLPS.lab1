@@ -1,6 +1,7 @@
 package blp.lab1.service;
 
 import blp.lab1.model.Order;
+import blp.lab1.model.Status;
 import blp.lab1.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public void paidForOrder(Long order_id) {
-        orderRepository.paidForOrder(order_id);
+    public void changeStatus(Long order_id, Status new_status) {
+        orderRepository.changeStatus(order_id, new_status.toString());
     }
 
     public Order fetchOrderById(Long id) {

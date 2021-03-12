@@ -14,8 +14,8 @@ public class Order implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "paid")
-    private Boolean paid;
+    @Column(name = "status")
+    private String status;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -35,8 +35,8 @@ public class Order implements Serializable{
 
     public Order(){};
 
-    public Order(Boolean paid, User user, Restaurant restaurant, Set<Food> foods) {
-        this.paid = paid;
+    public Order(Status status, User user, Restaurant restaurant, Set<Food> foods) {
+        this.status = status.toString();
         this.user = user;
         this.restaurant = restaurant;
         this.orderedFood = foods;
@@ -48,12 +48,10 @@ public class Order implements Serializable{
         return orderedFood;
     }
 
-    public Boolean getPaid () {
-        return this.paid;
-    }
+    public Status getStatus() {return Status.valueOf(this.status); }
 
-    public Order setPaid (Boolean paid) {
-        this.paid = paid;
+    public Order setPaid (Status status) {
+        this.status = status.toString();
         return this;
     }
 
@@ -72,3 +70,4 @@ public class Order implements Serializable{
         return this;
     }
 }
+

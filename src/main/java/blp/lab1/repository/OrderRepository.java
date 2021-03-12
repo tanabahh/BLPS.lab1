@@ -14,6 +14,6 @@ import javax.transaction.Transactional;
 public interface OrderRepository extends CrudRepository<Order, Long>, JpaRepository<Order, Long> {
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "update orders set paid = true where orders.id = ( :order_id)")
-    void paidForOrder(@Param("order_id") Long order_id);
+    @Query(nativeQuery = true, value = "update orders set status = ( :new_status) where orders.id = ( :order_id)")
+    void changeStatus(@Param("order_id") Long order_id, @Param("new_status") String new_status);
 }
