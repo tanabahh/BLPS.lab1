@@ -33,7 +33,7 @@ public class OrderController {
      @ApiOperation(value = "${OrderController.getOrder}")
      @GetMapping("/{id}")
      public String getOrder(@ApiParam("id") @PathVariable(name = "id") Long orderId) {
-         System.out.println("status " + orderService.fetchOrderById(orderId).getStatus().toString());
+         //System.out.println("status " + orderService.fetchOrderById(orderId).getStatus().toString());
         return "status " + orderService.fetchOrderById(orderId).getStatus().toString();
      }
 
@@ -52,7 +52,7 @@ public class OrderController {
      @ApiOperation(value = "${OrderController.pay}")
      @PostMapping("/{id}/pay")
      public String pay(@ApiParam("id") @PathVariable(name = "id") Long id) {
-         System.out.println("Paid" + id);
+         //System.out.println("Paid" + id);
         orderService.changeStatus(id, Status.PAID);
         return "OK";
      }
@@ -78,6 +78,7 @@ public class OrderController {
     @ApiOperation(value = "${OrderController.courier_assigned}")
     @PostMapping("/{id}/courier_assigned")
     public String courierAssigned(@ApiParam("id") @PathVariable(name = "id") Long id) {
+
         if (orderService.fetchOrderById(id).getStatus() == Status.COOKING) {
             orderService.changeStatus(id, Status.COURIER_ASSIGNED);
             return "OK";

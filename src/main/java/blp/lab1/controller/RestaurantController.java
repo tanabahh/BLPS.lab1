@@ -26,7 +26,7 @@ public class RestaurantController {
         this.restaurantService = restaurantService;
     }
 
-    @ApiOperation(value = "${RestaurantControlle.addRestaurant}")
+    @ApiOperation(value = "${RestaurantController.addRestaurant}")
     @PostMapping("/add")
     public HttpStatus addRestaurant(@ApiParam("name") @RequestParam(name = "name") String name,
                                     @ApiParam("restaurant_food") @RequestParam(name = "restaurant_food") Set<Long> restaurantFood) {

@@ -48,6 +48,10 @@ public class Order implements Serializable{
         return orderedFood;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public Status getStatus() {return Status.valueOf(this.status); }
 
     public Order setPaid (Status status) {
