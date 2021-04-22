@@ -1,7 +1,5 @@
 package blp.lab1.model;
 
-import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -43,6 +41,10 @@ public class Order implements Serializable{
         this.orderedFood.forEach(x -> x.getOrdered().add(this));
     }
 
+
+    public User getUser() {
+        return user;
+    }
 
     public Set<Food> getOrderedFood() {
         return orderedFood;
