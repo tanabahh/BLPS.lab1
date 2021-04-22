@@ -7,5 +7,6 @@ import blp.lab1.model.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long>, JpaRepository<User, Long> {
+    User findUserByUsername(String username);
 }
 

@@ -33,13 +33,13 @@ public class UserController {
         this.authenticationManager = authenticationManager;
     }
 
-    @ApiOperation(value = "${UserController.login}")
-    @PostMapping("login")
-    public HttpStatus login (@ApiParam("name") @RequestParam(name = "name") String name, @ApiParam("password") @RequestParam(name = "password") String password) {
-        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(name, password));
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        return HttpStatus.OK;
-    }
+//    @ApiOperation(value = "${UserController.login}")
+//    @PostMapping("login")
+//    public HttpStatus login (@ApiParam("name") @RequestParam(name = "name") String name, @ApiParam("password") @RequestParam(name = "password") String password) {
+//        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(name, password));
+//        SecurityContextHolder.getContext().setAuthentication(auth);
+//        return HttpStatus.OK;
+//    }
 
     @ApiOperation(value = "${UserController.addUser}")
     @PostMapping("/add")
