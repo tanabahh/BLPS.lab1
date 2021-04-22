@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -27,8 +28,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests().anyRequest().authenticated()
-                .and().httpBasic()
+                //.authorizeRequests().anyRequest().authenticated().and()
+                .httpBasic()
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/food/add").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/order/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers(HttpMethod.POST, "/order/add").hasAnyRole()
+                .antMatchers(HttpMethod.POST, "/order/**/pay").hasAnyRole()
+                .antMatchers(HttpMethod.POST, "/order/**/to_restaurant").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/order/**/to_cook").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/order/**/courier_assigned").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/restaurant/add").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/user/add").hasRole("ADMIN")
+                .anyRequest().permitAll()
                 .and().sessionManagement().disable();
 
 //        http.httpBasic()
@@ -57,11 +70,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 
     @Override
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.userDetailsService(usersDetailsService);
+        builder.inMemoryAuthentication()
+                .withUser("user").password("{noop}password").roles("USER")
+                .and()
+                .withUser("admin").password("{noop}password").roles("ADMIN");
+        builder.userDetailsService(usersDetailsService).passwordEncoder(new BCryptPasswordEncoder());
     }
 }
