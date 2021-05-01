@@ -29,9 +29,12 @@ public class OrderService {
 
     public void changeStatus(Long order_id, Status new_status) {
         this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 Order order = orderRepository.findById(order_id).get();
                 orderRepository.changeStatus(order_id, new_status.toString());
+                notificationRepository.save(new Notification(order, order.getUser(), LocalDate.now()));
+                int a = 2/0;
                 notificationRepository.save(new Notification(order, order.getUser(), LocalDate.now()));
             }
         });
