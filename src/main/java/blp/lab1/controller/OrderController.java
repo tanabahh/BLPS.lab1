@@ -49,14 +49,17 @@ public class OrderController {
         return HttpStatus.OK;
      }
 
+     //немного изменить логику внутри и сделать отдельный метод для сервиса
      @ApiOperation(value = "${OrderController.pay}")
      @PostMapping("/{id}/pay")
      public String pay(@ApiParam("id") @PathVariable(name = "id") Long id) {
          System.out.println("Paid" + id);
-        orderService.changeStatus(id, Status.PAID);
+         orderService.pay(id);
+        //orderService.changeStatus(id, Status.PAID);
         return "OK";
      }
 
+     //убрать нужно будет так как теперь мы будем отправлять в ресторан когда слушатель получается сообщение об оплате
     @ApiOperation(value = "${OrderController.to_restaurant}")
     @PostMapping("/{id}/to_restaurant")
     public String toRestaurant(@ApiParam("id") @PathVariable(name = "id") Long id) {

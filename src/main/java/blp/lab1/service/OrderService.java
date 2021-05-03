@@ -19,12 +19,20 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final NotificationRepository notificationRepository;
     private final TransactionTemplate transactionTemplate;
+    private final MessageService messageService;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, NotificationRepository notificationRepository, PlatformTransactionManager transactionManager) {
+    public OrderService(OrderRepository orderRepository, NotificationRepository notificationRepository, PlatformTransactionManager transactionManager, MessageService messageService) {
         this.orderRepository = orderRepository;
         this.notificationRepository = notificationRepository;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
+        this.messageService = messageService;
+    }
+
+    public void pay(Long order_id) {
+        //возможно еще подумать над транзакциями и реализацией
+        changeStatus(order_id, Status.PAID);
+        this.messageService.sendQueueMessage("Заказ оплачен");
     }
 
     public void changeStatus(Long order_id, Status new_status) {
@@ -34,7 +42,7 @@ public class OrderService {
                 Order order = orderRepository.findById(order_id).get();
                 orderRepository.changeStatus(order_id, new_status.toString());
                 notificationRepository.save(new Notification(order, order.getUser(), LocalDate.now()));
-                int a = 2/0;
+                //int a = 2/0;
                 notificationRepository.save(new Notification(order, order.getUser(), LocalDate.now()));
             }
         });
