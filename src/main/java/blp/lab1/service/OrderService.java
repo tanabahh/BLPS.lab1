@@ -1,11 +1,14 @@
 package blp.lab1.service;
 
+import blp.lab1.ActiveMQConfig;
 import blp.lab1.model.Notification;
 import blp.lab1.model.Order;
 import blp.lab1.model.Status;
 import blp.lab1.repository.NotificationRepository;
 import blp.lab1.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -19,20 +22,23 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final NotificationRepository notificationRepository;
     private final TransactionTemplate transactionTemplate;
-    private final MessageService messageService;
+    private final ApplicationContext applicationContext;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, NotificationRepository notificationRepository, PlatformTransactionManager transactionManager, MessageService messageService) {
+    public OrderService(OrderRepository orderRepository, NotificationRepository notificationRepository,
+                        PlatformTransactionManager transactionManager, ApplicationContext applicationContext) {
         this.orderRepository = orderRepository;
         this.notificationRepository = notificationRepository;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
-        this.messageService = messageService;
+        this.applicationContext = applicationContext;
     }
 
-    public void pay(Long order_id) {
+    public void pay(Long orderId) {
         //возможно еще подумать над транзакциями и реализацией
-        changeStatus(order_id, Status.PAID);
-        this.messageService.sendQueueMessage("Заказ оплачен");
+        Order order = orderRepository.findById(orderId).get();
+        changeStatus(orderId, Status.PAID);
+        applicationContext.getBean(ActiveMQConfig.MyGateway.class).
+                sendToMqtt(String.format("Заказ оплачен: orderId = %d, userId = %d", orderId, order.getUser().getId()));
     }
 
     public void changeStatus(Long order_id, Status new_status) {

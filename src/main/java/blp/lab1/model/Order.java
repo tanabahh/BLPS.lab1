@@ -41,6 +41,9 @@ public class Order implements Serializable{
         this.orderedFood.forEach(x -> x.getOrdered().add(this));
     }
 
+    public Long getId() {
+        return this.id;
+    }
 
     public User getUser() {
         return user;

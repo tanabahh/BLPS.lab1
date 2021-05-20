@@ -1,9 +1,5 @@
 package blp.lab1;
 
-import blp.lab1.service.QueueListener;
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.activemq.pool.PooledConnectionFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -48,51 +44,51 @@ public class Lab1Application extends SpringBootServletInitializer {
         return new JtaTransactionManager();
     }
 
-    @Bean
-    public PooledConnectionFactory jmsFactory() {
-        ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
-        activeMQConnectionFactory.setBrokerURL("tcp://localhost:61616"); //изменить надо будет на xmpp://localhost:61222
-        PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory();
-        pooledConnectionFactory.setConnectionFactory(activeMQConnectionFactory);
-        pooledConnectionFactory.setMaxConnections(100);
-        return pooledConnectionFactory;
-    }
-
-    @Bean
-    public CachingConnectionFactory cachingConnectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setTargetConnectionFactory(jmsFactory());
-        connectionFactory.setSessionCacheSize(1);
-        return connectionFactory;
-    }
-
-    @Bean
-    public JmsTemplate jmsTemplate() {
-        JmsTemplate template = new JmsTemplate();
-        template.setConnectionFactory(cachingConnectionFactory());
-        template.setMessageConverter(new SimpleMessageConverter());
-        return template;
-    }
-
-    @Bean
-    public ActiveMQQueue myQueue() {
-        return new ActiveMQQueue("spring-queue");
-    }
-
-    @Bean
-    public QueueListener queueListener() {
-        return new QueueListener();
-    }
-
-    @Bean
-    public DefaultMessageListenerContainer queueContainer() {
-        DefaultMessageListenerContainer defaultMessageListenerContainer = new DefaultMessageListenerContainer();
-        defaultMessageListenerContainer.setConnectionFactory(cachingConnectionFactory());
-        defaultMessageListenerContainer.setDestination(myQueue());
-        defaultMessageListenerContainer.setMessageListener(queueListener()); //вот тут еще один бин
-        return defaultMessageListenerContainer;
-    }
-    
+//    @Bean
+//    public PooledConnectionFactory jmsFactory() {
+//        ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
+//        activeMQConnectionFactory.setBrokerURL("tcp://localhost:61616"); //изменить надо будет на xmpp://localhost:61222
+//        PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory();
+//        pooledConnectionFactory.setConnectionFactory(activeMQConnectionFactory);
+//        pooledConnectionFactory.setMaxConnections(100);
+//        return pooledConnectionFactory;
+//    }
+//
+//    @Bean
+//    public CachingConnectionFactory cachingConnectionFactory() {
+//        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+//        connectionFactory.setTargetConnectionFactory(jmsFactory());
+//        connectionFactory.setSessionCacheSize(1);
+//        return connectionFactory;
+//    }
+//
+//    @Bean
+//    public JmsTemplate jmsTemplate() {
+//        JmsTemplate template = new JmsTemplate();
+//        template.setConnectionFactory(cachingConnectionFactory());
+//        template.setMessageConverter(new SimpleMessageConverter());
+//        return template;
+//    }
+//
+//    @Bean
+//    public ActiveMQQueue myQueue() {
+//        return new ActiveMQQueue("spring-queue");
+//    }
+//
+//    @Bean
+//    public QueueListener queueListener() {
+//        return new QueueListener();
+//    }
+//
+//    @Bean
+//    public DefaultMessageListenerContainer queueContainer() {
+//        DefaultMessageListenerContainer defaultMessageListenerContainer = new DefaultMessageListenerContainer();
+//        defaultMessageListenerContainer.setConnectionFactory(cachingConnectionFactory());
+//        defaultMessageListenerContainer.setDestination(myQueue());
+//        defaultMessageListenerContainer.setMessageListener(queueListener()); //вот тут еще один бин
+//        return defaultMessageListenerContainer;
+//    }
+//
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return super.configure(builder);
